@@ -4,6 +4,7 @@ import { existsSync, unlinkSync } from 'fs';
 import { Writable } from 'stream';
 import { spawn, execFile } from 'child_process';
 import { path } from '@ffmpeg-installer/ffmpeg';
+import corsPackage from 'cors';
 
 // Create a writable stream that writes to the response
 class ResponseStream extends Writable {
@@ -20,7 +21,11 @@ class ResponseStream extends Writable {
 }
 
 const app = express();
+const cors = corsPackage();
 const upload = multer({ dest: 'uploads/' });
+
+// Enable CORS for all routes
+app.use(cors);
 
 // Speech to text endpoint
 app.post('/speech-to-text', upload.single('mp3'), async (req, res) => {
